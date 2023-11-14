@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Complaint List{% endblock %}
+
+{% block content %}
+  <div class="container mx-auto my-8">
+    <h2 class="text-2xl font-semibold mb-4">Complaint List</h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b text-left">ID</th>
+            <th class="py-2 px-4 border-b text-left">Author</th>
+            <th class="py-2 px-4 border-b text-left">Post</th>
+            <th class="py-2 px-4 border-b text-left">Text</th>
+            <th class="py-2 px-4 border-b text-left">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for complaint in complaints %}
+            <tr>
+              <td class="py-2 px-4 border-b text-left">{{ complaint.id }}</td>
+              <td class="py-2 px-4 border-b text-left">{{ complaint.author.username }}</td>
+              <td class="py-2 px-4 border-b text-left">
+                <a href="{% url 'item:detail' complaint.post.id %}" class="text-blue-500 hover:underline">{{ complaint.post.name }}</a>
+              </td>
+              <td class="py-2 px-4 border-b text-left">{{ complaint.text }}</td>
+              <td class="py-2 px-4 border-b text-left">{{ complaint.date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

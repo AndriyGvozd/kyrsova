@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+<div class="container my-6">
+    <div class="card p-4 bg-light rounded shadow">
+        <h1 class="mb-4 text-3xl text-center">Логін</h1>
+
+        <form method="post" action=".">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Ім'я користувача</label>
+                {{ form.username }}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.password.id_for_label }}" class="form-label">Пароль</label>
+                {{ form.password }}
+            </div>
+
+            {% if form.errors or form.non_field_errors %}
+                <div class="mb-3 p-4 bg-danger text-white rounded">
+                    {% for field in form %}
+                        {{ field.errors }}
+                    {% endfor %}
+
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary bg-primary">Підтвердити</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

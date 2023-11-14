@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Items{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-5 bg-light">
+        <div class="row">
+            <div class="col-md-3">
+                <form method="get" action="{% url 'item:items' %}">
+                    <div class="mb-3">
+                        <input name="query" class="form-control py-3" type="text" value="{{ query }}" placeholder="Що шукаєте?">
+                    </div>
+
+                    <button class="btn btn-primary btn-block">Пошук</button>
+                </form>
+
+                <hr class="my-4">
+
+                <p class="font-weight-bold">Категорії</p>
+
+                <ul class="list-unstyled">
+                    <li class="py-2{% if not category_id %} bg-secondary{% endif %}">
+                        <a href="{% url 'item:items' %}?query={{ query }}">Всі категорії</a>
+                    </li>
+                    {% for category in categories|dictsort:"id" %}
+                        <li class="py-2{% if category.id == category_id %} bg-secondary{% endif %}">
+                            <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <form method="get" action="{% url 'item:items' %}">
+                <hr class="my-4">
+
+                <p class="font-weight-bold">Регіон</p>
+                <select name="region" class="form-control">
+                    <option value="" {% if not region %}selected{% endif %}>Вся Україна</option>
+                    {% for r in regions %}
+                        <option value="{{ r }}" {% if r == region %}selected{% endif %}>{{ r }}</option>
+                    {% endfor %}
+                </select>
+
+                <hr class="my-4">
+                
+                <p class="font-weight-bold">Діапазон цін</p>
+                <div class="mb-3">
+                    <label for="min_price">Мінімальна ціна:</label>
+                    <input type="number" name="min_price" min="0" id="min_price" value="{{ min_price }}" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="max_price">Максимальна ціна:</label>
+                    <input type="number" name="max_price" min="0" id="max_price" value="{{ max_price }}" class="form-control">
+                </div>
+
+                <button class="btn btn-primary btn-block">Фільтрувати</button>
+                </form>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'item:items' %}" class="mt-2 btn btn-warning btn-block mb-2">Скинути фільтр</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-9">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for item in items %}
+                        <div class="col">
+                            <a href="{% url 'item:detail' item.id %}" class="text-decoration-none">
+                                <div class="overflow-hidden rounded-top aspect-ratio-4/3 bg-light">
+                                    <img src="{{ item.image.url }}" class="object-fit w-100 h-100">
+                                </div>
+
+                                <div class="p-4 bg-light rounded-bottom shadow-sm">
+                                    <h2 class="text-2xl">{{ item.name }}</h2>
+                                    <p class="text-gray-500">Ціна: {{ item.price }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="container my-4">
+                    <div class="row justify-content-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                {% if items.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1" aria-label="First">
+                                            <span aria-hidden="true">&laquo;&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ items.previous_page_number }}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                
+                                <li class="page-item disabled">
+                                    <span class="page-link">Сторінка {{ items.number }} з {{ items.paginator.num_pages }}</span>
+                                </li>
+                
+                                {% if items.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ items.next_page_number }}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ items.paginator.num_pages }}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endblock %}
