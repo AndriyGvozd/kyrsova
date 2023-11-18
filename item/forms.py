@@ -4,6 +4,7 @@ from .models import Item, Complaint
 
 INPUT_CLASSES = 'w-full py-4 px-6 rounded-xl border'
 
+
 class NewItemForm(forms.ModelForm):
     class Meta:
         model = Item
@@ -28,6 +29,17 @@ class NewItemForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             })
         }
+        
+    def clean_price(self):
+        price = self.cleaned_data['price']
+        if price < 0:
+            raise forms.ValidationError("Ціна не може бути від'ємною")
+        return price
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if not image:
+            raise forms.ValidationError("Завантаження зображення є обов'язковим")
+        return image    
 
 class EditItemForm(forms.ModelForm):
     class Meta:
@@ -50,6 +62,17 @@ class EditItemForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             })
         }
+        
+    def clean_price(self):
+        price = self.cleaned_data['price']
+        if price < 0:
+            raise forms.ValidationError("Ціна не може бути від'ємною")
+        return price
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if not image:
+            raise forms.ValidationError("Завантаження зображення є обов'язковим")
+        return image
         
 class ComplaintForm(forms.ModelForm):
     class Meta:

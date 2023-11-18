@@ -11,24 +11,16 @@
                         <input name="query" class="form-control py-3" type="text" value="{{ query }}" placeholder="Що шукаєте?">
                     </div>
 
-                    <button class="btn btn-primary btn-block">Пошук</button>
-                </form>
-
-                <hr class="my-4">
+                <hr class="my-4"> 
 
                 <p class="font-weight-bold">Категорії</p>
 
-                <ul class="list-unstyled">
-                    <li class="py-2{% if not category_id %} bg-secondary{% endif %}">
-                        <a href="{% url 'item:items' %}?query={{ query }}">Всі категорії</a>
-                    </li>
+                <select name="category" class="form-control">
+                    <option value="0" {% if not category_id %}selected{% endif %}>Усі категорії</option>
                     {% for category in categories|dictsort:"id" %}
-                        <li class="py-2{% if category.id == category_id %} bg-secondary{% endif %}">
-                            <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
-                        </li>
+                        <option value="{{ category.id }}" {% if category.id == category_id %}selected{% endif %}>{{ category.name }}</option>
                     {% endfor %}
-                </ul>
-                <form method="get" action="{% url 'item:items' %}">
+                </select>
                 <hr class="my-4">
 
                 <p class="font-weight-bold">Регіон</p>
@@ -51,6 +43,8 @@
                     <label for="max_price">Максимальна ціна:</label>
                     <input type="number" name="max_price" min="0" id="max_price" value="{{ max_price }}" class="form-control">
                 </div>
+
+                <hr class="my-4">
 
                 <button class="btn btn-primary btn-block">Фільтрувати</button>
                 </form>
