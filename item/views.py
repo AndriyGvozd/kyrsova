@@ -4,17 +4,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .enviroment import REGIONS
 from .forms import NewItemForm, EditItemForm, ComplaintForm
-from .models import Category, Item, Complaint
+from .models import Category, Item, Complaint, Region
 from django.db.models.functions import Lower
 
 def items(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
-    region = request.GET.get('region', '')
+    region_id = request.GET.get('region', 0)
     min_price = request.GET.get('min_price', 0)
     max_price = request.GET.get('max_price', float('inf'))
 
     categories = Category.objects.all()
+    regions = Region.objects.all()
     all_items = Item.objects.filter(is_sold=False).order_by('-created_at')
 
     if category_id is not "0" and category_id:
@@ -25,8 +26,8 @@ def items(request):
         Q(name__icontains=query) | Q(description__icontains=query) | Q(name__icontains=query[1:]) | Q(description__icontains=query[1:])
     )
         
-    if region !="":
-        all_items = all_items.filter(region=region)
+    if region_id is not "0" and region_id:
+        all_items = all_items.filter(region_id=int(region_id))
 
     if min_price and max_price:
         min_price, max_price = float(min_price), float(max_price)
@@ -52,8 +53,8 @@ def items(request):
         'query': query,
         'categories': categories,
         'category_id': int(category_id),
-        'region': region,
-        'regions': REGIONS,
+        'region_id': int(region_id),
+        'regions': regions, 
         'min_price': min_price,
         'max_price': max_price,
     })

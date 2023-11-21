@@ -21,7 +21,7 @@ class NewItemForm(forms.ModelForm):
             }),
             'region': forms.Select(attrs={
                 'class': INPUT_CLASSES
-            }, choices=Item.REGION_CHOICES),
+            }),
             'price': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
@@ -54,7 +54,7 @@ class EditItemForm(forms.ModelForm):
             }),
             'region': forms.Select(attrs={
                 'class': INPUT_CLASSES
-            }, choices=Item.REGION_CHOICES),
+            }),
             'price': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),

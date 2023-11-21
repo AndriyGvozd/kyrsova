@@ -25,9 +25,9 @@
 
                 <p class="font-weight-bold">Регіон</p>
                 <select name="region" class="form-control">
-                    <option value="" {% if not region %}selected{% endif %}>Вся Україна</option>
-                    {% for r in regions %}
-                        <option value="{{ r }}" {% if r == region %}selected{% endif %}>{{ r }}</option>
+                    <option value="" {% if not region_id %}selected{% endif %}>Вся Україна</option>
+                    {% for r in regions|dictsort:"id" %}
+                        <option value="{{ r.id }}" {% if r.id == region_id %}selected{% endif %}>{{ r.name }}</option>
                     {% endfor %}
                 </select>
 

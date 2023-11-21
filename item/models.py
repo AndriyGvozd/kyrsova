@@ -11,42 +11,23 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class Region(models.Model):
+    name = models.CharField(max_length=55)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'Regions'
+    
+    def __str__(self):
+        return self.name
 
 class Item(models.Model):
-    
-    REGION_CHOICES = [
-        ("Вінницька область", "Вінницька область"),
-        ("Волинська область", "Волинська область"),
-        ("Дніпропетровська область", "Дніпропетровська область"),
-        ("Донецька область", "Донецька область"),
-        ("Житомирська область", "Житомирська область"),
-        ("Закарпатська область", "Закарпатська область"),
-        ("Запорізька область", "Запорізька область"),
-        ("Івано-Франківська область", "Івано-Франківська область"),
-        ("Київ", "Київ"),
-        ("Київська область", "Київська область"),
-        ("Кіровоградська область", "Кіровоградська область"),
-        ("Луганська область", "Луганська область"),
-        ("Львівська область", "Львівська область"),
-        ("Миколаївська область", "Миколаївська область"),
-        ("Одеська область", "Одеська область"),
-        ("Полтавська область", "Полтавська область"),
-        ("Рівненська область", "Рівненська область"),
-        ("Сумська область", "Сумська область"),
-        ("Тернопільська область", "Тернопільська область"),
-        ("Харківська область", "Харківська область"),
-        ("Херсонська область", "Херсонська область"),
-        ("Хмельницька область", "Хмельницька область"),
-        ("Черкаська область", "Черкаська область"),
-        ("Чернівецька область", "Чернівецька область"),
-        ("Чернігівська область", "Чернігівська область"),
-    ]
     
     category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE)
     name = models.CharField(max_length=75)
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
-    region = models.CharField(max_length=50, null=True, choices=REGION_CHOICES)
+    region = models.ForeignKey(Region, related_name='items', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='item_images', blank=True, null=True)
     is_sold = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, related_name='items', on_delete=models.CASCADE)
