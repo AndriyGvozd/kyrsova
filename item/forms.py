@@ -9,6 +9,14 @@ class NewItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ('category', 'name', 'description', 'region', 'price', 'image',)
+        labels = {
+            'name': ('Назва'),
+            'description': ('Опис'),
+            'region': ('Регіон'),
+            'price': ('Ціна'),
+            'image': ('Зображення'),
+            'category': ('Категорія'),
+        }
         widgets = {
             'category': forms.Select(attrs={
                 'class': INPUT_CLASSES
@@ -45,6 +53,14 @@ class EditItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ('name', 'description', 'region', 'price', 'image', 'is_sold')
+        labels = {
+            'name': ('Назва'),
+            'description': ('Опис'),
+            'region': ('Регіон'),
+            'price': ('Ціна'),
+            'image': ('Зображення'),
+            'is_sold': ('Деактивувати'),
+        }
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': INPUT_CLASSES

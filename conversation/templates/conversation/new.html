@@ -1,9 +1,9 @@
 {% extends 'core/base.html' %}
 
-{% block title %}New conversation{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">Нове обговорення</h1>
+<h1 class="mb-6 text-3xl">{{ title }}</h1>
 
 <form method="post" action=".">
     {% csrf_token %}

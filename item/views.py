@@ -6,11 +6,20 @@ from .enviroment import REGIONS
 from .forms import NewItemForm, EditItemForm, ComplaintForm
 from .models import Category, Item, Complaint, Region
 from django.db.models.functions import Lower
+from dashboard.models import History
 
 def items(request):
     query = request.GET.get('query', '')
-    category_id = request.GET.get('category', 0)
-    region_id = request.GET.get('region', 0)
+    category_id = request.GET.get('category')
+    if category_id:
+        category_id = int(category_id)
+    else:
+        category_id = 0
+    region_id = request.GET.get('region')
+    if region_id:
+        region_id = int(region_id)
+    else:
+        region_id = 0
     min_price = request.GET.get('min_price', 0)
     max_price = request.GET.get('max_price', float('inf'))
 
@@ -65,6 +74,13 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
 
+    if request.user.is_authenticated:
+        history_record = History.objects.filter(user=request.user, item=item).first()
+
+        if history_record:
+            history_record.delete()
+        History.objects.create(user=request.user, item=item)
+
     return render(request, 'item/detail.html', {
         'item': item,
         'related_items': related_items
@@ -105,7 +121,7 @@ def new(request):
 
     return render(request, 'item/form.html', {
         'form': form,
-        'title': 'New item',
+        'title': 'Створення оголошення',
     })
 
 @login_required
@@ -124,7 +140,7 @@ def edit(request, pk):
 
     return render(request, 'item/form.html', {
         'form': form,
-        'title': 'Edit item',
+        'title': 'Редагування',
     })
 
 @login_required

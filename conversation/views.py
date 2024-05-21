@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from item.models import Item
 
 from .forms import ConversationMessageForm
-from .models import Conversation
+from .models import Conversation, ConversationMessage
 
 @login_required
 def new_conversation(request, item_pk):
@@ -37,7 +37,8 @@ def new_conversation(request, item_pk):
         form = ConversationMessageForm()
     
     return render(request, 'conversation/new.html', {
-        'form': form
+        'form': form,
+        'title': 'Нове обговорення'
     })
 
 @login_required
@@ -67,7 +68,32 @@ def detail(request, pk):
     else:
         form = ConversationMessageForm()
 
+    
     return render(request, 'conversation/detail.html', {
         'conversation': conversation,
         'form': form
     })
+    
+@login_required
+def edit(request, pk):
+    conversation_message = get_object_or_404(ConversationMessage, pk=pk)
+
+    if request.method == 'POST':
+        form = ConversationMessageForm(request.POST, instance=conversation_message)
+
+        if form.is_valid():
+            form.save()
+            return redirect('conversation:detail', pk=conversation_message.conversation.pk)
+    else:
+        form = ConversationMessageForm(instance=conversation_message)
+    
+    return render(request, 'conversation/new.html', {
+        'form': form,
+        'title': 'Редагування повідомлення'
+    })
+
+@login_required
+def delete(request, pk):
+    conversation_message = get_object_or_404(ConversationMessage, pk=pk)
+    conversation_message.delete()
+    return redirect('conversation:detail', pk=conversation_message.conversation.id)
