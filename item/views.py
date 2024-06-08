@@ -6,7 +6,7 @@ from .enviroment import REGIONS
 from .forms import NewItemForm, EditItemForm, ComplaintForm
 from .models import Category, Item, Complaint, Region
 from django.db.models.functions import Lower
-from dashboard.models import History
+from dashboard.models import History, Wishlist
 
 def items(request):
     query = request.GET.get('query', '')
@@ -74,18 +74,21 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
 
+    in_wishlist = False
     if request.user.is_authenticated:
         history_record = History.objects.filter(user=request.user, item=item).first()
-
+        
         if history_record:
             history_record.delete()
         History.objects.create(user=request.user, item=item)
+        in_wishlist = Wishlist.objects.filter(user=request.user, item=item).exists()
 
     return render(request, 'item/detail.html', {
         'item': item,
-        'related_items': related_items
+        'related_items': related_items,
+        'in_wishlist': in_wishlist
     })
- 
+
 @login_required    
 def complaint(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -154,3 +157,4 @@ def delete(request, pk):
 def complaint_list(request):
     complaints = Complaint.objects.all()
     return render(request, 'item/complaint.html', {'complaints': complaints})
+

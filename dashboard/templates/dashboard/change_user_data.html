@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Змінити дані користувача{% endblock %}
+
+{% block content %}
+<div class="container mt-6">
+    <div class="card p-4 bg-light rounded shadow">
+        <h2 class="mb-4 text-2xl text-center">Змінити дані користувача</h2>
+        <form method="post" action="{% url 'dashboard:change_user_data' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">Нікнейм</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Електронна пошта</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                {% if error_message %}
+                <p class="text-danger">{{ error_message }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+            <button class="btn btn-danger bg-danger" onclick="window.history.back()">Скасувати</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

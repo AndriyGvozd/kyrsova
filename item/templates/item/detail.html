@@ -12,6 +12,9 @@
         <h1 class="mb-4 text-3xl">{{ item.name }}</h1>
         <p class="text-gray-500"><strong>Ціна: </strong>{{ item.price }}</p>
         <p class="text-gray-500"><strong>Продавець: </strong>{{ item.created_by.username }}</p>
+        {% if request.user != item.created_by %}
+            <a href="{% url 'dashboard:user_profile' item.created_by.id %}" class="btn btn-primary mt-2">Переглянути усі оголошення {{ item.created_by.username }}</a>
+        {% endif %}
 
         {% if item.region %}
             <p class="text-gray-700">
@@ -40,14 +43,25 @@
 
                 <a href="{% url 'item:edit' item.id %}" class="btn btn-primary mt-2">Редагувати</a>
                 <a href="{% url 'item:delete' item.id %}" class="btn btn-danger mt-2">Видалити</a>
+                <div class="text-left mt-2">
+                    <a href="#" onclick="window.history.back()" class="btn btn-secondary">Повернутися назад</a>
+                </div>
             </div>
         {% else %}
             <a href="{% url 'conversation:new' item.id %}" class="btn btn-primary mt-2">Написати продавцю</a>
+            {% if in_wishlist %}
+                <a href="{% url 'dashboard:remove_from_wishlist' item.id %}" class="btn btn-danger mt-2">Видалити з списку обраних</a>
+            {% else %}
+                <a href="{% url 'dashboard:add_to_wishlist' item.id %}" class="btn btn-primary mt-2">Додати до списку обраних ♡</a>
+            {% endif %}
             <a href="{% url 'item:complaint' item.id %}" class="btn btn-danger mt-2">Поскаржитися</a>
             
             {% if request.user.is_superuser %}
                 <a href="{% url 'item:delete' item.id %}" class="btn btn-danger mt-2">Видалити</a>
             {% endif %}
+            <div class="text-left mt-2">
+                <a href="#" onclick="window.history.back()" class="btn btn-secondary">Повернутися назад</a>
+            </div>
         {% endif %}
     </div>
 </div>

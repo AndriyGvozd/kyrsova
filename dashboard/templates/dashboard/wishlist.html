@@ -6,13 +6,13 @@
     <div class="container mt-6">
         <div class="card p-4 bg-light rounded shadow">
             
-            <h2 class="mb-1 text-2xl text-center">Переглянуті оголошення</h2>
+            <h2 class="mb-1 text-2xl text-center">Список бажаних товарів</h2>
             <div class="container mt-4">
                 <div class="text-center">
                     <a href="#" onclick="window.history.back()" class="btn btn-secondary mb-4">Повернутися назад</a>
                 </div>
             </div>
-
+            
             <div class="row row-cols-1 row-cols-md-3 g-3">
                 {% for item in items %}
                     <div class="col">
@@ -22,6 +22,12 @@
                                 <div class="card-body">
                                     <h2 class="card-title text-2xl">{{ item.item.name }}</h2>
                                     <p class="card-text text-gray-500">Ціна: {{ item.item.price }}</p>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <form method="post" action="{% url 'dashboard:remove_from_wishlist2' item.item.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Видалити</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </a>

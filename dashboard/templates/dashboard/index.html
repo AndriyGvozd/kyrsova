@@ -8,6 +8,8 @@
             <div class="mb-4 text-center">
                 <a href="{% url 'item:new' %}" class="btn btn-primary me-2">Створити</a>
                 <a href="{% url 'dashboard:history' %}" class="btn btn-primary me-2">Історія перегляду</a>
+                <a href="{% url 'dashboard:wishlist' %}" class="btn btn-primary me-2">Список обраного</a>
+                <a href="{% url 'dashboard:change_user_data' %}" class="btn btn-primary me-2">Змінити дані користувача</a>
                 <form method="post" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger bg-danger">Вийти</button>
